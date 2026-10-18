@@ -133,10 +133,10 @@
 
   // Custom domains: enable at go-live (DNS for liamogrady.dev must be on Cloudflare; this only
   // adds the web records and never touches the Microsoft 365 MX records).
-  // "routes": [
-  //   { "pattern": "liamogrady.dev", "custom_domain": true },
-  //   { "pattern": "www.liamogrady.dev", "custom_domain": true }
-  // ],
+  "routes": [
+    { "pattern": "liamogrady.dev", "custom_domain": true },
+    { "pattern": "www.liamogrady.dev", "custom_domain": true }
+  ],
 
   // ---------------------------------------------------------------------------------------------
   // Dev site: a second Worker, deployed from the `dev` branch (`wrangler deploy --env dev`).
@@ -163,7 +163,7 @@
         { "name": "RL_CONTACT", "namespace_id": "2003", "simple": { "limit": 3, "period": 60 } }
       ],
       "vars": {
-        "SITE_URL": "https://liamogrady-dev-dev.liamogrady.workers.dev",
+        "SITE_URL": "https://dev.liamogrady.dev",
         "AGENT_PROVIDER": "openai",
         "OPENAI_MODEL": "gpt-6-luna",
         "OPENAI_MODEL_REASON": "gpt-6-luna",
@@ -179,9 +179,8 @@
         "CONTACT_TO": "ogradyliam5@gmail.com",
         "TURNSTILE_SITE_KEY": "",
         "ALLOWED_HOSTS": ""
-      }
-      // Custom domain at go-live:
-      // "routes": [{ "pattern": "dev.liamogrady.dev", "custom_domain": true }]
+      },
+      "routes": [{ "pattern": "dev.liamogrady.dev", "custom_domain": true }]
     }
   }
 }
