@@ -379,19 +379,6 @@ export const projects: Project[] = [
     glyph: 'plane',
   },
   {
-    id: 'code-apps-template',
-    name: 'Power Apps Code Apps template',
-    tagline: 'A starter template for Power Apps code apps.',
-    description:
-      'A Power Apps code app template with navigation, mock data and TypeScript components, so a new app starts from a clean base.',
-    kind: 'open-source',
-    year: '2025',
-    stack: ['TypeScript', 'Vite', 'Power Apps code apps', 'PAC CLI'],
-    repo: 'https://github.com/ogradyliam5/PowerApps-Code-Apps-Template',
-    publish: true,
-    glyph: 'grid',
-  },
-  {
     id: 'drift-review',
     name: 'Dataverse Drift Review',
     tagline: 'What changed in this environment, and who changed it?',
