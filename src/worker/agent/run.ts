@@ -245,7 +245,7 @@ export async function runAgent(o: RunAgentOptions): Promise<void> {
     }
     if (finalText === null) {
       await emit({ type: 'status', text: 'Writing the answer…' });
-      messages.push({ role: 'user', content: 'Answer the visitor now, in 2-6 sentences, using the tool results above. Do not call any more tools.' });
+      messages.push({ role: 'user', content: 'Answer the visitor now, in 1-4 sentences, using the tool results above. Do not call any more tools.' });
       const res = await chat.chat({ messages, maxTokens: CHAT_MAX_TOKENS });
       steps++;
       addUsage(res.usage);

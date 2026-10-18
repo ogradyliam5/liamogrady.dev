@@ -58,12 +58,12 @@ export function agentsPage(ctx: BuildContext): string {
   const url = 'https://liamogrady.dev/mcp';
   const body = page(html`<article class="stack measure-60 gap-6">
   <header class="stack">
-    <span class="eyebrow">For agents and developers</span>
-    <h1 class="title">This site has <em>an API for minds.</em></h1>
-    <p class="lede">Everything on liamogrady.dev is available to AI agents in the formats they prefer, read-only and grounded in the public profile.</p>
+    <span class="eyebrow">Developers</span>
+    <h1 class="title">Connect your AI tools to this site</h1>
+    <p class="lede">The profile on this site is available to AI tools as an MCP server and as plain files. Everything is read-only.</p>
   </header>
   <section class="card stack">
-    <h2 class="h2">Remote MCP server</h2>
+    <h2 class="h2">MCP server</h2>
     <pre class="code" tabindex="0">${url}</pre>
     <p class="prose">Model Context Protocol over Streamable HTTP (current spec, with 2025-era clients supported). No authentication, rate-limited, read-only. ${MCP_TOOLS_SUMMARY} Resources: <code>liam://profile.md</code>, <code>liam://profile.json</code>. Prompts: <code>introduce_liam</code>, <code>assess_fit</code>.</p>
     <h3 class="eyebrow">Connect</h3>
@@ -80,7 +80,7 @@ Tools → Add a tool → New tool → Model Context Protocol → URL above → A
 Declarative agent → Add an action → Start with an MCP server → URL above</pre>
   </section>
   <section class="card stack">
-    <h2 class="h2">WebMCP, in this page</h2>
+    <h2 class="h2">WebMCP</h2>
     <p class="prose">When a browser agent supports WebMCP (<code>document.modelContext</code>), the home page registers tools for it directly: <code>search_profile</code>, <code>get_section</code>, <code>navigate</code> and <code>open_agent</code>. They run in the visitor's browser and never send data anywhere else.</p>
   </section>
   <section class="card stack">
@@ -93,11 +93,11 @@ Declarative agent → Add an action → Start with an MCP server → URL above</
     </ul>
   </section>
   <section class="card stack">
-    <h2 class="h2">The on-site agent</h2>
-    <p class="prose"><code>POST /api/agent</code> streams Server-Sent Events: <code>meta</code>, <code>status</code>, <code>tool</code>, <code>tool_result</code>, <code>ui</code>, <code>card</code>, <code>text</code>, <code>done</code>. UI events let the model drive this page (navigate, highlight, change the swarm's formation, open X-ray). It is grounded only in the public profile, refuses to discuss clients, and falls back to deterministic retrieval when the model budget is spent.</p>
+    <h2 class="h2">The chat API</h2>
+    <p class="prose"><code>POST /api/agent</code> streams Server-Sent Events: <code>meta</code>, <code>status</code>, <code>tool</code>, <code>tool_result</code>, <code>ui</code>, <code>card</code>, <code>text</code>, <code>done</code>. UI events let the chat scroll and highlight this page. It only uses the public profile, does not discuss clients, and falls back to plain search when the model is unavailable or the daily budget is spent.</p>
   </section>
 </article>`);
-  return layout(ctx, { path: '/agents', title: `For agents · ${person.name}`, description: 'Connect your AI agent to Liam O\u2019Grady\u2019s public profile: MCP server, WebMCP tools, llms.txt and a terminal CV.' }, body);
+  return layout(ctx, { path: '/agents', title: `Developers · ${person.name}`, description: 'Connect your AI tools to Liam O\u2019Grady\u2019s public profile: MCP server, llms.txt and a terminal CV.' }, body);
 }
 
 export function colophonPage(ctx: BuildContext): string {
@@ -105,8 +105,8 @@ export function colophonPage(ctx: BuildContext): string {
   const body = page(html`<article class="stack measure-60 gap-6">
   <header class="stack">
     <span class="eyebrow">Colophon</span>
-    <h1 class="title">How this site <em>works.</em></h1>
-    <p class="lede">A personal site built like a production system: an edge Worker, a GPU engine written from scratch, an agent with visible guardrails, and an MCP server for other people's agents.</p>
+    <h1 class="title">How this site is built</h1>
+    <p class="lede">A static site on a Cloudflare Worker, a particle animation written from scratch for the GPU, a chat that uses OpenAI, and an MCP server.</p>
   </header>
   <section class="card stack">
     <h2 class="h2">By the numbers (this build)</h2>
@@ -131,9 +131,9 @@ export function colophonPage(ctx: BuildContext): string {
   </section>
   <section class="card stack">
     <h2 class="h2">Type and colour</h2>
-    <p class="prose">Instrument Serif for display, Geist for text, Geist Mono for the machine voice, all under the SIL Open Font License. Two accents: Atlantic cyan for the machine and gorse gold for the human.</p>
+    <p class="prose">Instrument Serif for headings, Geist for text and Geist Mono for code, all under the SIL Open Font License. The accent colours are gold and cyan.</p>
   </section>
-  <p class="muted">Press <kbd>X</kbd> on the home page to see all of this live.</p>
+  <p class="muted">Press <kbd>X</kbd> on the home page for live performance figures.</p>
 </article>`);
   return layout(ctx, { path: '/colophon', title: `Colophon · ${person.name}`, description: 'How liamogrady.dev is built: Cloudflare Workers, a hand-written WebGPU engine, an on-site agent and an MCP server.' }, body);
 }
@@ -141,9 +141,9 @@ export function colophonPage(ctx: BuildContext): string {
 export function notFoundPage(ctx: BuildContext): string {
   const body = page(html`<div class="stack measure-44">
     <span class="eyebrow">404</span>
-    <h1 class="display fs-4">This page wandered <em>off the swarm.</em></h1>
-    <p class="lede">Ask the agent where to find what you're after, or head home.</p>
-    <div class="row"><a class="btn btn--primary" href="/">${icon('arrow')}<span>Home</span></a><button class="btn" type="button" data-agent-open>${icon('spark')}<span>Ask my agent</span></button></div>
+    <h1 class="display fs-4">Page not found</h1>
+    <p class="lede">That page doesn't exist. Try the home page, or ask a question.</p>
+    <div class="row"><a class="btn btn--primary" href="/">${icon('arrow')}<span>Home</span></a><button class="btn" type="button" data-agent-open>${icon('spark')}<span>Ask a question</span></button></div>
   </div>`);
   return layout(ctx, { path: '/404', title: `Not found · ${person.name}`, description: 'Page not found.' }, body);
 }

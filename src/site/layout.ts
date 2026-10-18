@@ -42,7 +42,7 @@ const NAV = [
   ['journey', 'Experience'],
   ['credentials', 'Credentials'],
   ['writing', 'Writing'],
-  ['agents', 'For agents'],
+  ['agents', 'Developers'],
   ['contact', 'Contact'],
 ] as const;
 
@@ -153,8 +153,7 @@ ${app ? html`<div class="stage" aria-hidden="true"><canvas id="swarm"></canvas><
       ${NAV.map(([id, label]) => html`<li><a href="${navHref(id)}" data-nav="${id}">${label}</a></li>`)}
     </ul>
     <div class="nav-actions">
-      ${app ? html`<button class="btn btn--small hide-sm" type="button" data-xray-toggle aria-pressed="false" title="X-ray: see how this site works (X)">${icon('xray')}<span>X-ray</span></button>
-      <button class="btn btn--small btn--primary" type="button" data-agent-open aria-haspopup="dialog">${icon('spark')}<span>Ask my agent</span> <kbd aria-hidden="true">/</kbd></button>` : html`<a class="btn btn--small" href="/">${icon('arrow')}<span>Home</span></a>`}
+      ${app ? html`<button class="btn btn--small btn--primary" type="button" data-agent-open aria-haspopup="dialog">${icon('spark')}<span>Ask a question</span> <kbd aria-hidden="true">/</kbd></button>` : html`<a class="btn btn--small" href="/">${icon('arrow')}<span>Home</span></a>`}
     </div>
   </nav>
 </header>
@@ -169,20 +168,16 @@ ${app ? agentChrome() : ''}
 }
 
 function footer(ctx: BuildContext): Raw {
-  const kb = (n: number) => `${(n / 1024).toFixed(1)} KB`;
   return html`<footer class="site-footer" data-xray="&lt;footer&gt; · build ${ctx.git.sha}">
   <div class="shell footer-grid">
     <div class="colophon-line">
       <span>© ${new Date().getFullYear()} ${person.name}</span>
-      <span>Designed and built with AI coding agents</span>
-      <span>0 dependencies · hand-written WebGPU &amp; WGSL</span>
-      <span>JS ${kb(ctx.stats.jsGzipBytes)} gz · CSS ${kb(ctx.stats.cssGzipBytes)} gz</span>
-      <span data-edge>Served from the edge</span>
+      <span>${person.location}</span>
     </div>
     <div class="colophon-line">
       <a href="/cv">Printable CV</a>
-      <a href="/agents">For agents</a>
-      <a href="/colophon">Colophon</a>
+      <a href="/agents">Developers</a>
+      <a href="/colophon">How this site is built</a>
       <a href="/llms.txt">llms.txt</a>
       <a href="${person.links.github}" rel="me">GitHub</a>
       <a href="${person.links.linkedin}" rel="me">LinkedIn</a>
@@ -193,32 +188,33 @@ function footer(ctx: BuildContext): Raw {
 
 /** Agent dock + panel + x-ray HUD shells. Behaviour is attached by the client bundle. */
 function agentChrome(): Raw {
-  return html`<aside class="dock" data-dock aria-label="Liam's agent" data-xray="agent dock · /api/agent (SSE)">
-  <form class="dock-bar" data-dock-form role="search" aria-label="Ask Liam's agent">
+  return html`<aside class="dock" data-dock aria-label="Ask about Liam" data-xray="agent dock · /api/agent (SSE)">
+  <form class="dock-bar" data-dock-form role="search" aria-label="Ask a question about Liam">
     <span class="spark" aria-hidden="true"></span>
-    <label class="sr-only" for="dock-input">Ask anything about Liam, or paste a job description</label>
-    <input id="dock-input" name="q" type="text" autocomplete="off" maxlength="4000" placeholder="Ask anything about Liam — or paste a job spec" data-short="Ask, or paste a job spec" data-dock-input>
+    <label class="sr-only" for="dock-input">Ask about Liam's work, or paste a job description</label>
+    <input id="dock-input" name="q" type="text" autocomplete="off" maxlength="4000" placeholder="Ask about Liam's work, or paste a job description" data-short="Ask a question" data-dock-input>
     <button class="btn btn--small btn--primary" type="submit">${icon('send')}<span class="sr-only">Ask</span></button>
   </form>
   <div class="dock-hints" role="group" aria-label="Suggested questions">
-    <button type="button" data-ask="fit">Is Liam a fit for my role?</button>
-    <button type="button" data-ask="architect">Sketch an agent architecture</button>
-    <button type="button" data-ask="What has Liam built with MCP?">What has he built with MCP?</button>
+    <button type="button" data-ask="fit">Check a job description</button>
+    <button type="button" data-ask="architect">Suggest an architecture</button>
+    <button type="button" data-ask="What has Liam built with MCP?">What has he built?</button>
   </div>
 </aside>
 <section class="panel" data-panel role="dialog" aria-modal="false" aria-labelledby="panel-title" aria-hidden="true">
   <header class="panel-head">
     <span class="spark" aria-hidden="true"></span>
-    <h2 id="panel-title">Liam's agent</h2>
+    <h2 id="panel-title">Ask about Liam</h2>
     <span class="chip" data-agent-model>public profile only</span>
-    <button class="btn btn--small" type="button" data-agent-close aria-label="Close the agent">${icon('close')}</button>
+    <button class="btn btn--small panel-new" type="button" data-agent-new disabled title="Start a new chat">${icon('plus')}<span>New chat</span></button>
+    <button class="btn btn--small" type="button" data-agent-close aria-label="Close the chat">${icon('close')}</button>
   </header>
   <div class="panel-log" data-log aria-live="polite" aria-relevant="additions"></div>
   <footer class="panel-foot">
     <div class="modes" role="group" aria-label="Mode">
-      <button type="button" data-mode="chat" aria-pressed="true">Ask</button>
-      <button type="button" data-mode="fit" aria-pressed="false">Fit check (paste a job spec)</button>
-      <button type="button" data-mode="architect" aria-pressed="false">Sketch an architecture</button>
+      <button type="button" data-mode="chat" aria-pressed="true">Question</button>
+      <button type="button" data-mode="fit" aria-pressed="false">Job fit</button>
+      <button type="button" data-mode="architect" aria-pressed="false">Architecture</button>
     </div>
     <form data-agent-form>
       <label class="sr-only" for="agent-input">Message</label>

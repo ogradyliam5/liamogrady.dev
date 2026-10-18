@@ -22,13 +22,13 @@ export const person = {
   origin: 'Galway, Ireland',
   /** First professional role in Microsoft Business Applications. */
   careerStart: '2019-10-01',
-  headline: 'I design AI agents that do real work, and I build the tools that make them real.',
+  headline: "AI Architect at Avanade, London.",
   oneLiner:
-    "AI Architect at Avanade. Agentic AI on the Microsoft stack: Copilot Studio, Microsoft Foundry, Microsoft 365 Copilot and the Power Platform.",
+    'AI Architect at Avanade in London. I design and build AI agents with Copilot Studio, Microsoft Foundry, Microsoft 365 Copilot and the Power Platform.',
   summary: [
-    "I'm an AI Architect at Avanade in London, working where the Microsoft stack meets AI agents.",
-    'For seven years I have designed and delivered enterprise solutions on Dynamics 365 and the Power Platform. For the last few, that has meant agentic AI: Copilot Studio agents, Microsoft Foundry, Microsoft 365 Copilot rollouts and the governance that turns pilots into something an enterprise can trust.',
-    'I work from architecture down to code. Alongside client work I build open-source MCP servers and agent tooling for the Microsoft community, using AI coding agents for much of the implementation.',
+    "I'm an AI Architect at Avanade in London. I design and build AI agents for organisations on Microsoft 365, mostly with Copilot Studio, Microsoft Foundry and the Power Platform.",
+    'Before Avanade I spent nearly seven years on Dynamics 365 and the Power Platform: at a Microsoft partner in Galway, at Air Partner in London, where I went from engineer to solution architect, and leading the AI practice at DigPacks.',
+    'I still write code. In my own time I build open-source MCP servers and tools for people working with agents, and I use AI coding agents for a lot of the implementation.',
   ],
   email: 'ogradyliam5@gmail.com',
   links: {
@@ -65,7 +65,7 @@ export const experience: Role[] = [
     end: null,
     place: 'London',
     summary:
-      "Architecting agentic AI solutions on the Microsoft stack in Avanade's Data & AI practice.",
+      "Designing AI agent solutions on the Microsoft stack in Avanade's Data & AI practice.",
     highlights: [
       'Solution architecture for agentic AI across Copilot Studio, Microsoft Foundry and Microsoft 365 Copilot.',
       'Shaping reusable patterns, certification paths and enablement for the wider Data & AI team.',
@@ -81,7 +81,7 @@ export const experience: Role[] = [
     end: '2026-08',
     place: 'London',
     summary:
-      'Led the AI and Copilot practice: strategy, architecture and governance for safe, scalable agentic AI on the Microsoft stack.',
+      'Led the AI and Copilot practice: strategy, architecture and governance for Copilot Studio and Power Platform AI work.',
     highlights: [
       'Set the strategy, architecture and governance model for Copilot Studio and Power Platform AI delivery.',
       'Owned end-to-end design and delivery of Copilot Studio agents across many concurrent engagements.',
@@ -124,7 +124,7 @@ export const experience: Role[] = [
     end: '2021-08',
     place: 'Galway',
     summary:
-      'Trusted point of contact for large public and private sector customers across the Microsoft Business Applications stack, at a Microsoft Gold Partner.',
+      'Support and consultancy for public and private sector customers on Dynamics 365 and the Power Platform, at a Microsoft Gold Partner.',
     highlights: [
       'Support, administration and customisation across Dynamics 365 CE, Power Apps, Power Automate, Power BI, SQL Server and Azure.',
       'Built and maintained functional solutions to SLA, working directly with senior client stakeholders.',
@@ -210,58 +210,58 @@ export const capabilities: Capability[] = [
     id: 'agents',
     title: 'Copilot Studio agents',
     blurb:
-      'Production-grade conversational and autonomous agents for whatever the business needs: IT, HR, operations, sales, finance, customer service and the back office.',
+      'Agents for IT, HR, operations, sales and customer service, connected to the systems and documents people already use.',
     points: [
-      'Knowledge-grounded agents over policies, knowledge bases and line-of-business systems',
-      'Tool-using agents integrated with ITSM, CRM, ERP and collaboration platforms',
-      'Voice-enabled agent patterns for high-volume inbound contact',
-      'Hand-off, escalation and human-in-the-loop workflows',
+      'Agents that answer from policies, knowledge bases and business systems',
+      'Agents that take actions in ITSM, CRM and ERP systems',
+      'Voice agents for busy contact centres',
+      'Hand-off to a person when the agent should not decide',
     ],
     tools: ['Copilot Studio', 'Microsoft 365 Copilot', 'Teams', 'Power Automate', 'Dataverse'],
   },
   {
     id: 'architecture',
-    title: 'Agentic AI architecture',
+    title: 'Agent architecture',
     blurb:
-      'End-to-end architecture for safe, scalable agentic AI on the Microsoft stack: Copilot Studio, Microsoft Foundry, Azure AI and the Power Platform.',
+      'How agents, data, integrations and security fit together across Copilot Studio, Microsoft Foundry, Azure and the Power Platform.',
     points: [
-      'Reference architectures and reusable accelerators',
-      'Capability models and phased delivery roadmaps',
-      'Integration patterns across Microsoft 365, Dynamics 365 and Azure',
-      'Cost, performance and observability design',
+      'Reference architectures and reusable starting points',
+      'Phased roadmaps, from first pilot to wider rollout',
+      'Integration with Microsoft 365, Dynamics 365 and Azure',
+      'Cost, performance and monitoring',
     ],
     tools: ['Microsoft Foundry', 'Azure OpenAI', 'Azure', 'MCP', 'Microsoft Graph'],
   },
   {
     id: 'governance',
-    title: 'AI governance & adoption',
-    blurb: 'The guardrails that turn AI pilots into compliant, repeatable enterprise capability.',
+    title: 'AI governance and adoption',
+    blurb: 'The policies, controls and training an organisation needs before it can use agents every day.',
     points: [
       'Responsible AI, data residency and compliance reviews',
-      'Microsoft 365 Copilot readiness assessments and controlled rollouts',
-      'Centre-of-excellence patterns, standards and ALM',
-      "Training programmes and Microsoft 'Agent in a Day' enablement",
+      'Microsoft 365 Copilot readiness checks and phased rollouts',
+      'Centre of excellence standards and ALM',
+      "Training, including Microsoft's Agent in a Day",
     ],
     tools: ['Microsoft Purview', 'Power Platform admin', 'Managed Environments', 'CoE Kit'],
   },
   {
     id: 'mcp',
-    title: 'MCP servers & agent tooling',
+    title: 'MCP servers and agent tools',
     blurb:
-      'Remote MCP servers and agent tooling that plug agents into real systems, from Copilot Studio to ChatGPT, Claude and GitHub Copilot.',
+      'Servers and tools that connect agents to other systems, for Copilot Studio, ChatGPT, Claude and GitHub Copilot.',
     points: [
-      'Zero-dependency MCP servers over Streamable HTTP',
-      'OAuth and API-key secured tool surfaces',
-      'Computer-use and browser agents with safe, reviewable actions',
-      'Coding-agent workflows from issue to reviewed pull request',
+      'Remote MCP servers over Streamable HTTP',
+      'OAuth and API-key security',
+      'Browser agents whose actions can be reviewed',
+      'Coding agents that go from an issue to a reviewed pull request',
     ],
     tools: ['Model Context Protocol', 'TypeScript', 'Node.js', 'GitHub Copilot', 'Cloudflare Workers'],
   },
   {
     id: 'power-platform',
-    title: 'Power Platform engineering',
+    title: 'Power Platform',
     blurb:
-      'Hands-on across the Power Platform: model-driven and code apps, Power Automate, Dataverse, plug-ins and Power BI.',
+      'Model-driven and code apps, Power Automate, Dataverse, C# plug-ins and Power BI.',
     points: [
       'Model-driven apps, Dataverse modelling and C# plug-ins',
       'Power Apps code apps in TypeScript',
@@ -274,7 +274,7 @@ export const capabilities: Capability[] = [
     id: 'dynamics',
     title: 'Dynamics 365 Customer Engagement',
     blurb:
-      'Sales, Service and Marketing implementations that move teams from inbox-driven work to managed, measurable processes.',
+      'Sales, Customer Service and Marketing implementations, from case management to customer journeys.',
     points: [
       'Sales, Customer Service and Marketing implementations',
       'Case management, SLAs and queue automation',
@@ -315,9 +315,9 @@ export const projects: Project[] = [
   {
     id: 'claw-pc',
     name: 'Claw PC for Copilot Cowork',
-    tagline: 'Give Microsoft 365 Copilot a real Windows machine.',
+    tagline: 'Let Microsoft 365 Copilot Cowork use a Windows PC.',
     description:
-      'Lets Microsoft 365 Copilot Cowork work on a real Windows PC or VM: commands, PowerShell, files and long-running jobs through a private dev tunnel. One script to start it, one plugin to upload. MCP server, Caddy secret path, dev tunnel and a self-test, all non-admin.',
+      'Lets Microsoft 365 Copilot Cowork run commands, PowerShell, file operations and long jobs on your own Windows PC or VM through a private dev tunnel. One script sets it up and it needs no admin rights.',
     kind: 'open-source',
     year: '2026',
     stack: ['TypeScript', 'MCP', 'PowerShell', 'Dev Tunnels', 'Microsoft 365 Copilot'],
@@ -328,9 +328,9 @@ export const projects: Project[] = [
   {
     id: 'credit-estimator',
     name: 'Copilot Studio Credit Estimator',
-    tagline: 'What will this agent cost, before anyone has to ask?',
+    tagline: 'Estimate what a Copilot Studio agent will cost.',
     description:
-      'An interactive, zero-dependency estimator for Copilot Studio credit consumption and cost, modelling the Standard harness and the GitHub Copilot harness side by side, because they are not priced the same way. Built by my engineering agent in the Copilot Studio GitHub Copilot harness.',
+      'A calculator for Copilot Studio credit use and cost. It compares the Standard harness with the GitHub Copilot harness, which are priced differently.',
     kind: 'tool',
     year: '2026',
     stack: ['JavaScript', 'Zero dependencies', 'Copilot Studio'],
@@ -342,7 +342,7 @@ export const projects: Project[] = [
   {
     id: 'vercel-mcp',
     name: 'Vercel MCP server for Copilot Studio',
-    tagline: 'Let a Copilot Studio agent run your deployments.',
+    tagline: 'Manage Vercel deployments from a Copilot Studio agent.',
     description:
       'A zero-dependency Node.js MCP server (Streamable HTTP, API-key auth) that lets a Copilot Studio agent inspect Vercel projects and deployments, read build logs and run management actions.',
     kind: 'open-source',
@@ -355,9 +355,9 @@ export const projects: Project[] = [
   {
     id: 'hevy',
     name: 'Hevy for ChatGPT',
-    tagline: 'Talk to your training log.',
+    tagline: 'Use your Hevy workout data in ChatGPT.',
     description:
-      'An unofficial Hevy integration for ChatGPT and Codex: analyse training, plan routines and safely log workouts through OAuth-enabled MCP tools, with previews and confirmation before every write.',
+      'An unofficial Hevy integration for ChatGPT and Codex. It reads your training history, plans routines and logs workouts through MCP tools, and asks for confirmation before it changes anything.',
     kind: 'open-source',
     year: '2026',
     stack: ['MCP', 'OAuth', 'ChatGPT Apps', 'Codex'],
@@ -368,9 +368,9 @@ export const projects: Project[] = [
   {
     id: 'auto-checkin',
     name: 'Auto Flight Check-In',
-    tagline: 'An AI browser agent that checks you in, for any airline.',
+    tagline: 'Automatic airline check-in with a browser agent.',
     description:
-      'Spots airline booking confirmations in your inbox, extracts the flight with an LLM, waits until check-in opens, then sends a computer-use browser agent to check you in, and emails you the result either way.',
+      'Finds booking confirmations in your inbox, reads the flight details, waits until check-in opens, then uses a browser agent to check you in and emails you the result.',
     kind: 'experiment',
     year: '2026',
     stack: ['Python', 'LLM extraction', 'browser-use', 'Docker'],
@@ -381,9 +381,9 @@ export const projects: Project[] = [
   {
     id: 'code-apps-template',
     name: 'Power Apps Code Apps template',
-    tagline: 'A TypeScript-first starting point for Power Apps code apps.',
+    tagline: 'A starter template for Power Apps code apps.',
     description:
-      'A reusable Power Apps code app template with generic navigation, mock data and TypeScript-first components, so a new authenticated or data-connected app starts from a clean base.',
+      'A Power Apps code app template with navigation, mock data and TypeScript components, so a new app starts from a clean base.',
     kind: 'open-source',
     year: '2025',
     stack: ['TypeScript', 'Vite', 'Power Apps code apps', 'PAC CLI'],
@@ -411,13 +411,13 @@ export const writing: { title: string; date: string; href: string; summary: stri
     title: 'Send Teams messages on behalf of your Copilot Studio agent',
     date: '2026-03-02',
     href: 'https://medium.com/@ogradyliam5/send-teams-messages-on-behalf-of-your-copilot-studio-agent-32ed4ec4ddc6',
-    summary: 'Proactive 1:1 Teams messages sent as your agent: rollout notices, outage alerts and nudges.',
+    summary: 'How to send one-to-one Teams messages as your agent, for rollout notices, outage alerts and reminders.',
   },
   {
     title: 'Copilot Studio building blocks: a practical decision tree',
     date: '2026-02-01',
     href: 'https://medium.com/@ogradyliam5/copilot-studio-building-blocks-a-practical-decision-tree-9acfca05097e',
-    summary: 'Instructions, topics, tools, knowledge or child agents? Where each requirement should live.',
+    summary: 'When to use instructions, topics, tools, knowledge or child agents in Copilot Studio.',
   },
 ];
 
@@ -433,9 +433,9 @@ export const music = {
 export const now = {
   updated: '2026-10',
   items: [
-    'Architecting agentic AI in the Data & AI practice at Avanade.',
-    'Building MCP servers and agent tooling for Copilot Studio and Microsoft 365 Copilot.',
-    'Agentic engineering: shipping open-source tools with GitHub Copilot and coding agents.',
+    'Designing AI agent solutions in the Data & AI practice at Avanade.',
+    'Building MCP servers and tools for Copilot Studio and Microsoft 365 Copilot.',
+    'Building open-source tools with GitHub Copilot and other coding agents.',
   ],
 };
 

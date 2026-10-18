@@ -265,7 +265,7 @@ idle(() => import('./ui/webmcp').then((m) => m.registerWebMcp({ open: async (q?:
 
 // A note for the curious.
 console.log(
-  '%cLOG%c  Liam O\u2019Grady · liamogrady.dev\n%cYou opened the console, so you are my kind of person.\nPress X for X-ray, / to talk to my agent, or: curl liamogrady.dev',
+  '%cLOG%c  Liam O\u2019Grady · liamogrady.dev\n%cPress / to ask a question, X for performance figures, or try: curl liamogrady.dev',
   'font:600 14px Geist Mono, monospace;color:#05070b;background:#f2b94b;padding:2px 6px;border-radius:3px',
   'font:500 12px Geist, sans-serif;color:#eaeff5',
   'font:12px Geist, sans-serif;color:#8793a4',
