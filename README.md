@@ -1,5 +1,9 @@
 # liamogrady.dev
 
+[![CI](https://github.com/ogradyliam5/liamogrady.dev/actions/workflows/ci.yml/badge.svg)](https://github.com/ogradyliam5/liamogrady.dev/actions/workflows/ci.yml)
+
+**Live:** https://liamogrady.dev
+
 The personal site of **Liam O'Grady**, AI Architect at Avanade, built as a small production system:
 
 - **The swarm:** a hand-written GPU particle engine (WGSL compute on WebGPU, GLSL ES 3.0 GPGPU on WebGL2) with up to 1,048,576 particles that flow between procedural formations: the orchestrator, Galway's dry-stone walls, the Galway → London flight path, his credentials, a banjo. No three.js, no models, no textures.
@@ -47,3 +51,11 @@ Edit `content/profile.ts`. It feeds every page, the agent's knowledge, the MCP s
 - `docs/RESEARCH.md`: what the most impressive sites do today and how this one goes further
 - `docs/DEPLOY-CLOUDFLARE.md`: new Cloudflare account, DNS move from GoDaddy (keeping Microsoft 365 mail), deploy, custom domain
 - `docs/WORKER.md`: endpoints, SSE event contract, configuration and secrets
+
+## Security and secrets
+
+No secrets are in this repository. API keys (OpenAI, Turnstile, Graph) live only in Cloudflare Worker secrets and GitHub Actions secrets; `.dev.vars.example` lists the names for local development. The Worker enforces a strict CSP, per-IP rate limits and a daily token budget on the agent.
+
+## Licence
+
+The code is shared for reference. Site content in `content/profile.ts` and the photos and copy are © Liam O'Grady, all rights reserved. Fonts keep their own licences (see `public/fonts/licenses`).
