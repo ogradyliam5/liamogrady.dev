@@ -781,7 +781,7 @@ export function createAgentUI(deps: Deps): AgentUI {
     stick = true;
     anchor = null;
     if (chip) {
-      chip.textContent = 'public profile only';
+      chip.textContent = '';
       chip.removeAttribute('title');
     }
     input.value = '';

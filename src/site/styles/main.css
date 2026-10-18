@@ -551,6 +551,8 @@
   .panel-head h2 { font-size: var(--step-0); font-weight: 500; letter-spacing: 0; }
   .panel-head .chip { margin-left: auto; }
   .panel-new[disabled] { opacity: 0.45; cursor: default; }
+  .panel-head .chip:empty { display: none; }
+  .panel-head h2 { white-space: nowrap; }
   @media (max-width: 480px) { .panel-new span, .panel-head .chip { display: none; } .panel-new { margin-left: auto; } }
   .panel-log { overflow-y: auto; padding: var(--space-5); display: grid; align-content: start; gap: var(--space-5); overscroll-behavior: contain; }
   .panel-foot { padding: var(--space-4) var(--space-5) var(--space-5); border-top: 1px solid var(--line); display: grid; gap: var(--space-3); }

@@ -40,7 +40,7 @@ const NAV = [
   ['capabilities', 'What I do'],
   ['work', 'Projects'],
   ['journey', 'Experience'],
-  ['credentials', 'Credentials'],
+  ['credentials', 'Certifications'],
   ['writing', 'Writing'],
   ['agents', 'Developers'],
   ['contact', 'Contact'],
@@ -205,8 +205,8 @@ function agentChrome(): Raw {
   <header class="panel-head">
     <span class="spark" aria-hidden="true"></span>
     <h2 id="panel-title">Ask about Liam</h2>
-    <span class="chip" data-agent-model>public profile only</span>
-    <button class="btn btn--small panel-new" type="button" data-agent-new disabled title="Start a new chat">${icon('plus')}<span>New chat</span></button>
+    <span class="chip" data-agent-model></span>
+    <button class="btn btn--small panel-new" type="button" data-agent-new disabled title="Start a new chat" aria-label="New chat">${icon('plus')}<span>New chat</span></button>
     <button class="btn btn--small" type="button" data-agent-close aria-label="Close the chat">${icon('close')}</button>
   </header>
   <div class="panel-log" data-log aria-live="polite" aria-relevant="additions"></div>
