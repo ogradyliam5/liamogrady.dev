@@ -210,7 +210,7 @@ export const capabilities: Capability[] = [
     id: 'agents',
     title: 'Copilot Studio agents',
     blurb:
-      'Agents for IT, HR, operations, sales and customer service, connected to the systems and documents people already use.',
+      'Copilot Studio agents for enterprise teams in IT, HR, operations, sales and customer service, connected to the systems and documents people already use.',
     points: [
       'Agents that answer from policies, knowledge bases and business systems',
       'Agents that take actions in ITSM, CRM and ERP systems',
