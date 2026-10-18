@@ -1,0 +1,9 @@
+<!doctype html><html><body style="margin:0;background:#300"><canvas id="c" width="400" height="300"></canvas><script type="module">
+const a = await navigator.gpu.requestAdapter(); const d = await a.requestDevice();
+d.lost.then(i => console.log('LOST', i.reason, i.message));
+const ctx = document.getElementById('c').getContext('webgpu');
+ctx.configure({ device: d, format: navigator.gpu.getPreferredCanvasFormat(), alphaMode: 'opaque' });
+let n = 0;
+function f() { const e = d.createCommandEncoder(); const p = e.beginRenderPass({ colorAttachments: [{ view: ctx.getCurrentTexture().createView(), clearValue: {r:0,g:0.6,b:0.3,a:1}, loadOp:'clear', storeOp:'store' }] }); p.end(); d.queue.submit([e.finish()]); if (++n < 60) requestAnimationFrame(f); else console.log('done frames', n); }
+requestAnimationFrame(f);
+</script></body></html>

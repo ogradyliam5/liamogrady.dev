@@ -1,0 +1,14 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "dev.liamogrady/profile",
+  "title": "Liam O'Grady — public profile",
+  "description": "Read-only public profile of Liam O'Grady, AI Architect: experience, projects, certs, role fit.",
+  "version": "1.0.0",
+  "websiteUrl": "https://liamogrady.dev/agents",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://liamogrady.dev/mcp"
+    }
+  ]
+}

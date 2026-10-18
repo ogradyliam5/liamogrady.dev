@@ -1,0 +1,187 @@
+// Cloudflare Worker configuration for liamogrady.dev.
+// Reference: https://developers.cloudflare.com/workers/wrangler/configuration/
+//
+// ACCOUNT SAFETY: never run `wrangler` directly on Liam's PC. Its global login belongs to the
+// band's Cloudflare account. Use `node scripts/wrangler-safe.mjs <dev|types|deploy>` (or the
+// npm scripts, which already do). See docs/WORKER.md.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+
+  // Worker name. Also the first label of the workers.dev hostname
+  // (liamogrady-dev.<your-subdomain>.workers.dev).
+  "name": "liamogrady-dev",
+
+  // Router entry point. Bundled by wrangler (esbuild), which also pulls in content/ and src/shared/.
+  "main": "src/worker/index.ts",
+
+  // Runtime behaviour is pinned to this date; bump it deliberately and re-test.
+  "compatibility_date": "2026-10-10",
+
+  // The Agents SDK MCP handler imports node:async_hooks (AsyncLocalStorage), which needs this flag.
+  "compatibility_flags": ["nodejs_compat"],
+
+  // No "account_id" on purpose: deploys take CLOUDFLARE_ACCOUNT_ID from the environment, set
+  // explicitly for Liam's own account (scripts/wrangler-safe.mjs refuses otherwise).
+
+  // Publish on <name>.<subdomain>.workers.dev, useful before the custom domain is switched on.
+  "workers_dev": true,
+
+  // Every uploaded version also gets its own preview URL (<version>-liamogrady-dev.<subdomain>.workers.dev).
+  "preview_urls": true,
+
+  // Static site produced by `bun scripts/build.ts` (frontend). Requests for files in ./dist are
+  // served directly from the asset store at no Worker cost, except the paths listed in
+  // run_worker_first, which always hit the Worker first (terminal CV on "/", the APIs and MCP).
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/", "/api/*", "/mcp", "/mcp/*"],
+    // Unknown paths get dist/404.html with a 404 status.
+    "not_found_handling": "404-page",
+    // /about -> /about/ (or /about.html) the way the static build lays pages out.
+    "html_handling": "auto-trailing-slash"
+  },
+
+  // Workers AI: only used if AGENT_PROVIDER is switched to "workers-ai" (the agent runs on OpenAI).
+  // In `npm run dev` this binding is not available (wrangler-safe forces --local so no
+  // Cloudflare login is ever needed); local dev uses AGENT_PROVIDER=mock from .dev.vars.
+  "ai": { "binding": "AI" },
+
+  // Two SQLite-backed Durable Objects (the free plan only allows SQLite-backed classes):
+  //   PRESENCE  live presence ("who else is here"), one instance named "lobby", hibernating WebSockets
+  //   BUDGET    the agent's daily token ledger, one instance named "ledger" (src/worker/budget.ts)
+  "durable_objects": {
+    "bindings": [
+      { "name": "PRESENCE", "class_name": "Presence" },
+      { "name": "BUDGET", "class_name": "Budget" }
+    ]
+  },
+
+  // Durable Object class history. Never edit an applied migration; add a new tag instead.
+  // (v1 has not been deployed yet, so both classes are declared together.)
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Presence", "Budget"] }],
+
+  // Per-client rate limits (keyed on the visitor IP in code). Each limiter needs its own
+  // namespace_id (a positive integer, unique within the Cloudflare account).
+  "ratelimits": [
+    // On-site agent: 8 requests a minute per IP (on top of the daily token budget below).
+    { "name": "RL_AI", "namespace_id": "1001", "simple": { "limit": 8, "period": 60 } },
+    // Public MCP server: 60 requests a minute per IP.
+    { "name": "RL_MCP", "namespace_id": "1002", "simple": { "limit": 60, "period": 60 } },
+    // Contact / CV-request form: 3 submissions a minute per IP.
+    { "name": "RL_CONTACT", "namespace_id": "1003", "simple": { "limit": 3, "period": 60 } }
+  ],
+
+  // Workers Logs: console output and request logs in the dashboard (no PII is logged).
+  "observability": { "enabled": true },
+
+  // Plain-text configuration (public; secrets go through `wrangler secret put`, see below).
+  "vars": {
+    // Canonical public URL (used in the terminal CV and agent links).
+    "SITE_URL": "https://liamogrady.dev",
+    // On-site agent provider: "openai" | "workers-ai" | "openai-compatible" | "mock" | "none".
+    // "openai" needs the OPENAI_API_KEY secret; until it is set, the agent answers from the
+    // deterministic profile index (the same as "none").
+    "AGENT_PROVIDER": "openai",
+    // OpenAI model for tool-calling chat and for the fit check / architecture sketch.
+    "OPENAI_MODEL": "gpt-6-luna",
+    "OPENAI_MODEL_REASON": "gpt-6-luna",
+    // reasoning.effort per job: none | low | medium | high | xhigh | max.
+    "OPENAI_REASONING_CHAT": "none",
+    "OPENAI_REASONING_ANALYSIS": "low",
+    // Empty = https://api.openai.com/v1. An AI Gateway URL (…/openai) adds caching and logs.
+    "OPENAI_BASE_URL": "",
+    // Daily cap on agent tokens (input + output, all visitors, UTC day). When it is spent the agent
+    // answers from the profile index until midnight UTC. 3,000,000 on gpt-6-luna is at most about
+    // $0.30-$1.50 a day, depending on the input/output mix. "0" turns the guard off.
+    "AGENT_DAILY_TOKENS": "3000000",
+    // Workers AI models (only when AGENT_PROVIDER = "workers-ai").
+    // Tool-calling chat model (cheap, 131k context).
+    "AGENT_MODEL_CHAT": "@cf/zai-org/glm-4.7-flash",
+    // Structured JSON analysis model (role fit, architecture sketch).
+    "AGENT_MODEL_REASON": "@cf/openai/gpt-oss-120b",
+    // Optional AI Gateway id for Workers AI (caching, logs, spend limits).
+    "AI_GATEWAY_ID": "",
+    // Contact delivery adapter: "graph" | "webhook" | "none" (none = UI falls back to mailto:).
+    "CONTACT_DELIVERY": "none",
+    // Where contact / CV requests are delivered.
+    "CONTACT_TO": "ogradyliam5@gmail.com",
+    // Turnstile site key (public, used by the frontend widget). Empty = Turnstile off.
+    "TURNSTILE_SITE_KEY": "",
+    // Extra hostnames allowed for /mcp and Turnstile (comma-separated, e.g. a staging domain).
+    "ALLOWED_HOSTS": ""
+    // Only when AGENT_PROVIDER = "openai-compatible" (Azure OpenAI / Microsoft Foundry / OpenAI):
+    //   "LLM_BASE_URL": "https://<resource>.openai.azure.com/openai/v1",
+    //   "LLM_MODEL": "<deployment or model name>",
+    //   "LLM_MODEL_REASON": "<optional second deployment for JSON analysis>",
+    //   "LLM_AUTH_HEADER": "api-key",          // or "authorization" (Bearer) for OpenAI
+    //   "LLM_API_VERSION": "",                 // e.g. 2024-10-21 for classic Azure deployments
+    // Only when CONTACT_DELIVERY = "graph":
+    //   "GRAPH_TENANT_ID": "<entra tenant id>",
+    //   "GRAPH_CLIENT_ID": "<app registration client id>",
+    //   "GRAPH_SENDER": "hello@liamogrady.dev"
+  },
+
+  // Secrets (never committed). Add them in the dashboard (Worker → Settings → Variables and
+  // Secrets) or with `node scripts/wrangler-safe.mjs secret put NAME`, which has the same
+  // explicit-credentials guard as deploy (see docs/WORKER.md):
+  //   OPENAI_API_KEY       OpenAI project key for the on-site agent
+  //   TURNSTILE_SECRET     Turnstile secret key (turns on server-side token checks)
+  //   LLM_API_KEY          key for the openai-compatible provider
+  //   GRAPH_CLIENT_SECRET  Entra app secret for Microsoft Graph sendMail
+  //   CONTACT_WEBHOOK_URL  Power Automate / Logic Apps HTTP trigger URL (contains a SAS key)
+
+  // Custom domains: enable at go-live (DNS for liamogrady.dev must be on Cloudflare; this only
+  // adds the web records and never touches the Microsoft 365 MX records).
+  // "routes": [
+  //   { "pattern": "liamogrady.dev", "custom_domain": true },
+  //   { "pattern": "www.liamogrady.dev", "custom_domain": true }
+  // ],
+
+  // ---------------------------------------------------------------------------------------------
+  // Dev site: a second Worker, deployed from the `dev` branch (`wrangler deploy --env dev`).
+  // Same code and pages, built with LOD_SITE_ENV=dev so it is marked "[dev]" and kept out of
+  // search engines. It has its own presence room, its own daily token budget and its own secrets.
+  // Bindings and vars are not inherited by environments, so they are all repeated here.
+  // ---------------------------------------------------------------------------------------------
+  "env": {
+    "dev": {
+      "name": "liamogrady-dev-dev",
+      "workers_dev": true,
+      "preview_urls": true,
+      "ai": { "binding": "AI" },
+      "durable_objects": {
+        "bindings": [
+          { "name": "PRESENCE", "class_name": "Presence" },
+          { "name": "BUDGET", "class_name": "Budget" }
+        ]
+      },
+      // Namespace ids must be unique within the account, so dev uses 2001-2003.
+      "ratelimits": [
+        { "name": "RL_AI", "namespace_id": "2001", "simple": { "limit": 8, "period": 60 } },
+        { "name": "RL_MCP", "namespace_id": "2002", "simple": { "limit": 60, "period": 60 } },
+        { "name": "RL_CONTACT", "namespace_id": "2003", "simple": { "limit": 3, "period": 60 } }
+      ],
+      "vars": {
+        "SITE_URL": "https://liamogrady-dev-dev.liamogrady.workers.dev",
+        "AGENT_PROVIDER": "openai",
+        "OPENAI_MODEL": "gpt-6-luna",
+        "OPENAI_MODEL_REASON": "gpt-6-luna",
+        "OPENAI_REASONING_CHAT": "none",
+        "OPENAI_REASONING_ANALYSIS": "low",
+        "OPENAI_BASE_URL": "",
+        // A smaller daily cap for the dev site.
+        "AGENT_DAILY_TOKENS": "500000",
+        "AGENT_MODEL_CHAT": "@cf/zai-org/glm-4.7-flash",
+        "AGENT_MODEL_REASON": "@cf/openai/gpt-oss-120b",
+        "AI_GATEWAY_ID": "",
+        "CONTACT_DELIVERY": "none",
+        "CONTACT_TO": "ogradyliam5@gmail.com",
+        "TURNSTILE_SITE_KEY": "",
+        "ALLOWED_HOSTS": ""
+      }
+      // Custom domain at go-live:
+      // "routes": [{ "pattern": "dev.liamogrady.dev", "custom_domain": true }]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "liamogrady-dev",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "liamogrady.dev: static site + Cloudflare Worker (MCP server, on-site agent, presence, contact, terminal CV).",
+  "scripts": {
+    "build": "bun scripts/build.ts",
+    "dev": "bun scripts/build.ts && node scripts/wrangler-safe.mjs dev",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "smoke:mcp": "node scripts/smoke-mcp.mjs",
+    "types": "node scripts/wrangler-safe.mjs types",
+    "deploy": "bun scripts/build.ts && node scripts/wrangler-safe.mjs deploy"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "2.0.0",
+    "agents": "^0.28.0",
+    "zod": "^4.2.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261010.1",
+    "@types/node": "^24.19.2",
+    "bun": "^1.4.3",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3",
+    "wrangler": "^4.149.0"
+  }
+}

@@ -1,0 +1,33 @@
+# Typecheck, unit tests and a production build for pull requests and feature branches.
+# Pushes to `dev` and `main` are checked and deployed by deploy.yml instead.
+# This workflow needs no Cloudflare credentials.
+name: ci
+on:
+  push:
+    branches-ignore: [main, dev]
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+      - run: npm ci --include=dev
+      - run: npm run typecheck
+      - run: npm test
+      - run: bun scripts/build.ts
+      - name: Bundle budget
+        run: |
+          js=$(find dist -name '*.js' -exec cat {} + | gzip -9 | wc -c)
+          echo "JS gzip total: $js bytes"
+          test "$js" -lt 81920

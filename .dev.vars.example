@@ -1,0 +1,16 @@
+# Local values for `npm run dev` (wrangler dev through scripts/wrangler-safe.mjs, local mode).
+# Copy to .dev.vars (git-ignored). NON-SECRET values only: real secrets are set on Liam's own
+# Cloudflare account with `node scripts/wrangler-safe.mjs secret put NAME` and never stored here.
+
+# Deterministic offline agent (no Workers AI binding in local mode).
+AGENT_PROVIDER=mock
+
+# Contact form answers { ok: false, error: "not_configured", mailto } so the UI falls back to email.
+CONTACT_DELIVERY=none
+
+# Daily token guard: off locally unless you set a number.
+AGENT_DAILY_TOKENS=0
+
+# To try the real OpenAI agent locally, put these in .dev.vars (git-ignored) instead of the mock:
+# AGENT_PROVIDER=openai
+# OPENAI_API_KEY=sk-...

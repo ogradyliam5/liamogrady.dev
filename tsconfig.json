@@ -1,0 +1,21 @@
+{
+  // Type-checks the Worker, the shared knowledge/content it bundles, and the Worker tests.
+  // The frontend (src/client, src/site, scripts/*.ts) is built by Bun and not covered here.
+  "compilerOptions": {
+    "target": "ES2024",
+    "lib": ["ES2024"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["@cloudflare/workers-types", "node"],
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": ["src/worker/**/*.ts", "src/shared/**/*.ts", "content/**/*.ts", "tests/worker/**/*.ts", "vitest.config.ts"]
+}

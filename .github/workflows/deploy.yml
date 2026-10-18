@@ -1,0 +1,61 @@
+# Branch deploys: every push to `dev` updates the dev site, every push to `main` updates the live site.
+# Each run type-checks, tests and builds first, so a broken commit never reaches either site.
+#
+# Repository secrets: CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID (Liam's own account).
+# Worker secrets such as OPENAI_API_KEY live on the Workers themselves and survive every deploy.
+name: deploy
+on:
+  push:
+    branches: [main, dev]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  deploy:
+    name: ${{ github.ref_name == 'main' && 'live site' || 'dev site' }}
+    if: github.ref_name == 'main' || github.ref_name == 'dev'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SITE: ${{ github.ref_name == 'main' && 'production' || 'dev' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+      - run: npm ci --include=dev
+      - run: npm run typecheck
+      - run: npm test
+      - name: Build
+        run: bun scripts/build.ts
+        env:
+          LOD_SITE_ENV: ${{ env.SITE }}
+      - name: Bundle budget
+        run: |
+          js=$(find dist -name '*.js' -exec cat {} + | gzip -9 | wc -c)
+          echo "JS gzip total: $js bytes"
+          test "$js" -lt 81920
+      - name: Deploy
+        run: |
+          if [ "$SITE" = "dev" ]; then node scripts/wrangler-safe.mjs deploy --env dev; else node scripts/wrangler-safe.mjs deploy --env=""; fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          LOD_DEPLOY: '1'
+      - name: Check the deployed site
+        run: |
+          if [ "$SITE" = "dev" ]; then base="https://liamogrady-dev-dev.liamogrady.workers.dev"; else base="https://liamogrady-dev.liamogrady.workers.dev"; fi
+          sha=$(git rev-parse --short HEAD)
+          for i in $(seq 1 12); do
+            got=$(curl -fsS "$base/build.json" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s).git.sha)}catch{console.log('')}})")
+            if [ "$got" = "$sha" ]; then echo "$base is serving $sha"; break; fi
+            echo "waiting for $sha (got '$got')"; sleep 5
+          done
+          test "$got" = "$sha"
+          curl -fsS -o /dev/null -w "home %{http_code}\n" "$base/"
+          curl -fsS -A curl/8 "$base/" | head -3
