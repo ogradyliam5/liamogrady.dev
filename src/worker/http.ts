@@ -1,11 +1,14 @@
 /** Small HTTP helpers shared by every route: JSON, standard headers, hosts, client info, rate limits. */
 import type { Env, RateLimiter } from './env';
 
-export const SITE_HOSTS = ['liamogrady.dev', 'www.liamogrady.dev'];
+export const SITE_HOSTS = ['liamogrady.dev', 'www.liamogrady.dev', 'dev.liamogrady.dev'];
 export const LOCAL_HOSTS = ['localhost', '127.0.0.1', '[::1]'];
 
-/** Matches this Worker's own workers.dev host and its preview URLs (<prefix>-liamogrady-dev.<sub>.workers.dev). */
-const OWN_WORKERS_DEV = /^(?:[a-z0-9-]+-)?liamogrady-dev\.[a-z0-9-]+\.workers\.dev$/i;
+/**
+ * Matches the live and dev Workers' own workers.dev hosts and their preview URLs:
+ * liamogrady-dev.<sub>.workers.dev, liamogrady-dev-dev.<sub>.workers.dev, <prefix>-liamogrady-dev[-dev].<sub>.workers.dev.
+ */
+const OWN_WORKERS_DEV = /^(?:[a-z0-9-]+-)?liamogrady-dev(?:-dev)?\.[a-z0-9-]+\.workers\.dev$/i;
 
 export function now(): number {
   return performance.now();

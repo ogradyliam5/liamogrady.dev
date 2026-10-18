@@ -30,15 +30,19 @@ describe('hosts and origins', () => {
   it('recognises this Worker’s workers.dev hosts and preview URLs only', () => {
     expect(isOwnWorkersDev('liamogrady-dev.liam.workers.dev')).toBe(true);
     expect(isOwnWorkersDev('abc12345-liamogrady-dev.liam.workers.dev')).toBe(true);
+    expect(isOwnWorkersDev('liamogrady-dev-dev.liam.workers.dev')).toBe(true);
+    expect(isOwnWorkersDev('abc12345-liamogrady-dev-dev.liam.workers.dev')).toBe(true);
+    expect(isOwnWorkersDev('liamogrady-dev-staging.liam.workers.dev')).toBe(false);
     expect(isOwnWorkersDev('other-worker.liam.workers.dev')).toBe(false);
     expect(isOwnWorkersDev('liamogrady-dev.liam.workers.dev.evil.com')).toBe(false);
   });
 
   it('builds the allow-list from the site, localhost, ALLOWED_HOSTS and the request host', () => {
-    expect(allowedHostnames({})).toEqual(['liamogrady.dev', 'www.liamogrady.dev', 'localhost', '127.0.0.1', '[::1]']);
+    expect(allowedHostnames({})).toEqual(['liamogrady.dev', 'www.liamogrady.dev', 'dev.liamogrady.dev', 'localhost', '127.0.0.1', '[::1]']);
     expect(allowedHostnames({ ALLOWED_HOSTS: ' Staging.liamogrady.dev , ' }, 'liamogrady-dev.liam.workers.dev')).toEqual([
       'liamogrady.dev',
       'www.liamogrady.dev',
+      'dev.liamogrady.dev',
       'localhost',
       '127.0.0.1',
       '[::1]',
